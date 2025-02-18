@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Graph</title>
+        <script src="CubicSpline.js"></script>
+		<script src="tabs.js"></script>
+		<script src="utils.js"></script>
+		<script src="leftPanel.js"></script>
+		<script src="collapseTab.js"></script>
+		<script src="curveData.js"></script>
+		<script src="popup.js"></script>
+		<script src="curvedataprovider.js"></script>
+		<script src="dataloader.js"></script>
+		<script src="graph.js"></script>
+		<script src="draw2d.js"></script>
+        <script src="main.js"></script>
+		
+		
+		<link rel="stylesheet" href="style.css">
+		<link href="fontawesome/css/fontawesome.css" rel="stylesheet" />
+		<link href="fontawesome/css/brands.css" rel="stylesheet" />
+		<link href="fontawesome/css/solid.css" rel="stylesheet" />
+		<link href="fontawesome/css/sharp-thin.css" rel="stylesheet" />
+		<link href="fontawesome/css/duotone-thin.css" rel="stylesheet" />
+		<link href="fontawesome/css/sharp-duotone-thin.css" rel="stylesheet" />
+    </head>
+    <body>
+		<div id="header">
+			<span id="headerText">Graph <i class="fa-solid fa-chart-bar"></i></span>
+		</div>
+		<div class="container">
+			<div id="controlPanel">
+				<div id="controlTabs" class="tab">
+					<button class="tablinks" tabid="tab3"><i class="fa-solid fa-floppy-disk"></i></button>
+					<button class="tablinks" tabid="tab2"><i class="fa-solid fa-diagram-project"></i></button>
+					<button class="tablinks" tabid="tab1"><i class="fa-solid fa-gears"></i></button>
+				</div>
+				<div id="tab1" class="controlGroup tabContent">
+					<div class="controlGroupHeader">
+						<span>Line</span>
+					</div>
+					<table border="0" cellpadding="0" cellspacing="8">
+						<tr>
+							<td class="controlText">Show points:</td>
+							<td class="controlInput"><input type="checkbox" id="drawPoints" class="checkBox"></td>
+						</tr>
+						<tr>
+							<td class="controlText">Line color:</td>
+							<td class="controlInput"><input type="color" id="lineColor" class="colorPicker" value="#FFFFFF"></td>
+						</tr>
+					</table>
+					<div class="controlGroupHeader">
+						<span>Grid</span>
+					</div>
+					<table border="0" cellpadding="0" cellspacing="8">
+						<tr>
+							<td class="controlText">X grid spacing:</td>
+							<td class="controlInput"><input type="text" id="xGridSpacing" class="controlInputText"></td>
+						</tr>
+						<tr>
+							<td class="controlText">Y grid spacing:</td>
+							<td class="controlInput"><input type="text" id="yGridSpacing" class="controlInputText"></td>
+						</tr>
+						<tr>
+							<td class="controlText">X min:</td>
+							<td class="controlInput"><input type="text" id="xMin" class="controlInputText"></td>
+						</tr>
+						<tr>
+							<td class="controlText">X max:</td>
+							<td class="controlInput"><input type="text" id="xMax" class="controlInputText"></td>
+						</tr>
+						<tr>
+							<td class="controlText">Y min:</td>
+							<td class="controlInput"><input type="text" id="yMin" class="controlInputText"></td>
+						</tr>
+						<tr>
+							<td class="controlText">Y max:</td>
+							<td class="controlInput"><input type="text" id="yMax" class="controlInputText"></td>
+						</tr>
+					</table>
+				</div>
+				<div id="tab2" class="controlGroup tabContent">
+					<div class="controlGroupHeader">
+						<span>Points</span>
+					</div>
+					<button class="pointRegionButton" id="addCurveButton"><i class="fa-solid fa-plus"></i></button>
+					<div class="collapseTab" id="curvePrototype" style="display: none;">
+						<button class="curveButton collapseButton">
+							<span class="textName">Line1</span>
+							<span class="collapseInfo" style="min-width: 20px;">+</span>
+						</button>
+						<div class="lineContent collapseTabContent">
+							<button class="pointRegionButton deleteCurve"><i class="fa-solid fa-trash"></i></button>
+							<button class="pointRegionButton addRowButton"><i class="fa-solid fa-plus"></i></button>
+							<table border="0" cellpadding="0" cellspacing="0" class="coordTable">
+								<tr>
+									<td class="coorText" style="text-align: center;">X:</td>
+									<td class="coorText" style="text-align: center;">Y:</td>
+									<td class="coorText" style="text-align: center;"> </td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div id="tab3" class="controlGroup tabContent">
+					<div class="controlGroupHeader">
+						<span>Save</span>
+					</div>
+					<table border="0" cellpadding="0" cellspacing="8">
+						<tr>
+							<td class="controlText">Name:</td>
+							<td class="controlInput"><input type="text" id="saveName" style="width: 97px;" value="graph"></td>
+						</tr>
+						<tr>
+							<td class="controlText">Type:</td>
+							<td class="controlInput">
+								<select id="saveType" style="width:105px;">
+									<option value="storage">Local storage</option>
+									<option value="file">File</option>
+								</select>
+							</td>
+						</tr>
+					</table>
+					<button class="pointRegionButton" id="saveButton"><i class="fa-solid fa-file-arrow-down iconBeforeSpace"></i>Save</button>
+					<div class="controlGroupHeader">
+						<span>Local storage</span>
+					</div>
+					<table border="0" cellpadding="0" cellspacing="8">
+						<tr>
+							<td class="controlText">File:</td>
+							<td class="controlInput">
+								<select id="storageFiles" style="width:105px;">
+									<option value="None">None</option>
+								</select>
+							</td>
+						</tr>
+					</table>
+					<button class="pointRegionButton" id="removeStorageButton"><i class="fa-solid fa-trash iconBeforeSpace"></i>Remove</button>
+					<button class="pointRegionButton" id="loadStorageButton"><i class="fa-solid fa-file-arrow-up iconBeforeSpace"></i>Load</button>
+					<div class="controlGroupHeader">
+						<span>Load from file</span>
+					</div>
+					<input type="file" id="fileInput" style="display: none;">
+					<button class="pointRegionButton" id="loadFileButton"><i class="fa-solid fa-file-arrow-up iconBeforeSpace"></i>Load</button>
+				</div>
+			</div>
+			<div id="content"></div>
+			<div class="overlay" id="overlay"></div>
+			<div class="popup" id="popup">
+				<p id="popupText">none</p>
+				<button id="popupYes">Yes</button>
+				<button id="popupNo">No</button>
+			</div>
+		</div>
+		
+    </body>
+</html>
